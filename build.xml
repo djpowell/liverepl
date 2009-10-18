@@ -12,9 +12,9 @@
     <ant dir="./liverepl-server" />
     <copy todir="./build">
       <fileset dir="./liverepl-server/build" />
-      <fileset dir="./liverepl-server/lib" />
+      <fileset dir="./liverepl-server/lib" includes="*.jar" />
       <fileset dir="./liverepl-agent/build" />
-      <fileset dir="./liverepl-agent/lib" />
+      <fileset dir="./liverepl-agent/lib" includes="*.jar" />
       <fileset file="./liverepl.bat" />
       <fileset file="./README.TXT" />
     </copy>
