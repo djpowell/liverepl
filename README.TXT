@@ -2,6 +2,8 @@ Clojure Live REPL - 2009-10-18
 David Powell <djpowell@djpowell.net>
 <http://github.com/djpowell/liverepl>
 
+This software is distributed under the MIT licence.
+
 ----------------------------------------
 
 Build
