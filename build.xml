@@ -17,6 +17,7 @@
       <fileset dir="./liverepl-agent/lib" includes="*.jar" />
       <fileset file="./liverepl.bat" />
       <fileset file="./README.TXT" />
+      <fileset file="./LICENSE" />
     </copy>
   </target>
 
