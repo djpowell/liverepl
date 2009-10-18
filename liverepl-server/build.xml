@@ -1,0 +1,33 @@
+<project name="liverepl-server" basedir="." default="jar">
+
+  <target name="clean" description="delete build and classes">
+    <delete dir="./build" />
+    <delete dir="./classes" />
+  </target>
+
+  <target name="compile">
+
+    <echo message="============================================================" />
+    <echo message="Ensure that clojure.jar is copied to ./liverepl-serer/lib" />
+    <echo message="============================================================" />
+
+    <mkdir dir="./classes" />
+    <javac debug="yes"
+	   srcdir="./src"
+	   destdir="./classes"
+	   includes="**/*.java">
+      <classpath>
+	<fileset dir="./lib" includes="*.jar" />
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="jar" description="build liverepl-server.jar" depends="compile">
+    <mkdir dir="./build" />
+    <jar destfile="build/liverepl-server.jar" manifest="src/META-INF/MANIFEST.MF">
+      <fileset dir="./classes" />
+      <fileset dir="./src" includes="**/*.clj" />
+    </jar>
+  </target>
+
+</project>

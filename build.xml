@@ -1,0 +1,24 @@
+<project name="liverepl" basedir="." default="build">
+
+  <target name="clean" description="delete build and classes">
+    <ant dir="./liverepl-agent" target="clean" />
+    <ant dir="./liverepl-server" target="clean" />
+    <delete dir="./build" />
+  </target>
+
+  <target name="build" description="build">
+    <mkdir dir="./build" />
+    <ant dir="./liverepl-agent" />
+    <ant dir="./liverepl-server" />
+    <copy todir="./build">
+      <fileset dir="./liverepl-server/build" />
+      <fileset dir="./liverepl-server/lib" />
+      <fileset dir="./liverepl-agent/build" />
+      <fileset dir="./liverepl-agent/lib" />
+      <fileset file="./liverepl.bat" />
+      <fileset file="./README.TXT" />
+    </copy>
+  </target>
+
+</project>
+
