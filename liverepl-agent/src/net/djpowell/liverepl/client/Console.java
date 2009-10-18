@@ -70,7 +70,8 @@ public class Console {
                 sh.join();
                 ch.join();
             } catch (InterruptedException e) {
-                s.close();
+                // if either thread dies, then allow the socket to
+                // close, terminating the other one
             }
         } finally {
             s.close();
