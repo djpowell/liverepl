@@ -20,6 +20,7 @@ public class Console {
 		final Writer cout = new OutputStreamWriter(System.out);
 		Socket s = new Socket(host, port);
 		try {
+			final Thread main = Thread.currentThread();
 			final Reader sin = new InputStreamReader(s.getInputStream());
 			final Writer sout = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
 
@@ -30,11 +31,14 @@ public class Console {
 						for (;;) {
 							// use line-based i/o for reading from the keyboard
 							String line = cin.readLine();
+							if (line == null) break;
 							sout.write(line + NEWLINE);
 							sout.flush();
 						}
 					} catch (IOException e) {
 						TRC.fine(e.getMessage());
+					} finally {
+						main.interrupt();
 					}
 				}
 			};
@@ -46,20 +50,28 @@ public class Console {
 					try {
 						for (;;) {
 							// use character based i/o for printing server responses
-							char c = (char) sin.read();
+							int ic = sin.read();
+							if (ic == -1) break;
+							char c = (char) ic;
 							cout.write(c);
 							cout.flush();
 						}
 					} catch (IOException e) {
 						TRC.fine(e.getMessage());
+					} finally {
+						main.interrupt();
 					}
 				}
 			};
 			sh.start();
-			
+		
 			// block until both threads finish
-			sh.join();
-			ch.join();
+			try {
+				sh.join();
+				ch.join();
+			} catch (InterruptedException e) {
+				s.close();
+			}
 		} finally {
 			s.close();
 		}
