@@ -26,8 +26,8 @@ Edit liverepl.bat to point to your installed JDK
 
 ----------------------------------------
 
-Opearation
-==========
+Operation
+=========
 
 To see a list of running Java processes on the system, and their
 process ids, enter:
