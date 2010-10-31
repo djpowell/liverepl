@@ -5,13 +5,6 @@
     (java.util.logging Logger)
     (clojure.lang LineNumberingPushbackReader)))
 
-(def new-line (System/getProperty "line.separator"))
-
-(defn repl-caught
-  "Override the default repl-caught to not rely on PrintStream"
-  [e]
-  (.write #^Writer *err* (str (clojure.main/repl-exception e) new-line)))
-
 ;; The client should connect immediately after the server starts up,
 ;; but in case there is a problem, we will kill the serversocket,
 ;; terminating the server, if the client fails to connect.
@@ -42,7 +35,7 @@
               *out* out
               *err* out]
                 (try
-                  (clojure.main/repl :caught repl-caught :init #(in-ns 'user))
+                  (clojure.main/repl :init #(do (in-ns 'user) (println "Clojure" (clojure-version))))
                 (catch Exception e ; discard errors caused by abrupt disconnection
                   nil)))))
       "Repl Thread")]

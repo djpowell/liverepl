@@ -10,14 +10,13 @@ import clojure.lang.Var;
 
 public class Repl {
 
-    final static public Symbol REPL_NS = Symbol.create("net.djpowell.liverepl.server.repl");
-    final static public Namespace NS = Namespace.findOrCreate(REPL_NS);
-    final static public Var REQUIRE = Var.intern(RT.CLOJURE_NS, Symbol.create("require"));
-    final static public Var REPL = Var.intern(NS, Symbol.create("repl"));
+    private final static Symbol REPL_NS = Symbol.create("net.djpowell.liverepl.server.repl");
+    private final static Namespace NS = Namespace.findOrCreate(REPL_NS);
+    private final static Var REQUIRE = Var.intern(RT.CLOJURE_NS, Symbol.create("require"));
+    private final static Var REPL = Var.intern(NS, Symbol.create("repl"));
     
 	public static void main(InetAddress host, int port) throws Exception {
 		// not really needed in clojure 1.1, as context class loaders are the default
-		// required so that clojure can load the repl code 
 		Var.pushThreadBindings(new PersistentArrayMap(new Object[] {RT.USE_CONTEXT_CLASSLOADER, Boolean.TRUE}));
 		try {
 			REQUIRE.invoke(REPL_NS);

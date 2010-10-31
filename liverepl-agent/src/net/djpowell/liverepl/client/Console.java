@@ -13,10 +13,11 @@ import java.util.logging.Logger;
 
 public class Console {
 
-    private static String NEWLINE = System.getProperty("line.separator");
+    private static final String NEWLINE = System.getProperty("line.separator");
     
-    public static void main(InetAddress host, int port) throws Exception {
+    public static void main(InetAddress host, int port, boolean readInput) throws Exception {
         final BufferedReader cin = new BufferedReader(new InputStreamReader(System.in));
+        if (!readInput) cin.close();
         final Writer cout = new OutputStreamWriter(System.out);
         Socket s = new Socket(host, port);
         try {
@@ -42,7 +43,7 @@ public class Console {
                     }
                 }
             };
-            ch.start();
+            if (readInput) ch.start();
 
             Thread sh = new Thread("SocketHandler") {
                 @Override
@@ -68,7 +69,7 @@ public class Console {
             // block until both threads finish
             try {
                 sh.join();
-                ch.join();
+                if (readInput) ch.join();
             } catch (InterruptedException e) {
                 // if either thread dies, then allow the socket to
                 // close, terminating the other one
