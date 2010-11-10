@@ -12,12 +12,12 @@ if [ ! -f "$JDK_HOME/lib/tools.jar" ]; then
 fi
 
 if which rlwrap >/dev/null; then
-    echo "Found rlwrap\n"
+    echo "Found rlwrap"
     breakchars="(){}[],^%$#@\"\";:''|\\"
      exec rlwrap --remember -c -b "$breakchars" \
 		java -cp "$LIVEREPL_HOME/liverepl-agent.jar:$JDK_HOME/lib/tools.jar" net.djpowell.liverepl.client.Main "$CLOJURE_JAR" "$LIVEREPL_HOME/liverepl-agent.jar" "$LIVEREPL_HOME/liverepl-server.jar" "$@"
 else
-	echo "rlwrap missing\n"
+	echo "rlwrap missing"
 	java -cp "$LIVEREPL_HOME/liverepl-agent.jar:$JDK_HOME/lib/tools.jar" net.djpowell.liverepl.client.Main "$CLOJURE_JAR" "$LIVEREPL_HOME/liverepl-agent.jar" "$LIVEREPL_HOME/liverepl-server.jar" "$@"
 
 fi
