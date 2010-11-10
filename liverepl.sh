@@ -11,5 +11,16 @@ if [ ! -f "$JDK_HOME/lib/tools.jar" ]; then
    exit 1
 fi
 
-java -cp "$LIVEREPL_HOME/liverepl-agent.jar:$JDK_HOME/lib/tools.jar" net.djpowell.liverepl.client.Main "$CLOJURE_JAR" "$LIVEREPL_HOME/liverepl-agent.jar" "$LIVEREPL_HOME/liverepl-server.jar" "$@"
+if which rlwrap >/dev/null; then
+    echo "Found rlwrap\n"
+    breakchars="(){}[],^%$#@\"\";:''|\\"
+     exec rlwrap --remember -c -b "$breakchars" \
+		java -cp "$LIVEREPL_HOME/liverepl-agent.jar:$JDK_HOME/lib/tools.jar" net.djpowell.liverepl.client.Main "$CLOJURE_JAR" "$LIVEREPL_HOME/liverepl-agent.jar" "$LIVEREPL_HOME/liverepl-server.jar" "$@"
+else
+	echo "rlwrap missing\n"
+	java -cp "$LIVEREPL_HOME/liverepl-agent.jar:$JDK_HOME/lib/tools.jar" net.djpowell.liverepl.client.Main "$CLOJURE_JAR" "$LIVEREPL_HOME/liverepl-agent.jar" "$LIVEREPL_HOME/liverepl-server.jar" "$@"
+
+fi
+
+
 
