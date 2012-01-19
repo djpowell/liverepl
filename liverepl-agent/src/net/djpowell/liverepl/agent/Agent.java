@@ -150,7 +150,7 @@ public class Agent {
             if (!clojureLoaded) { // if clojure wasn't loaded before, print current status
                 TRC.fine("Clojure is " + (isClojureLoaded() ? "" : "not ") + "loaded");
             }
-            startRepl(port);
+            startRepl(port, inst);
         } finally {
             popClassLoader(old);
         }
@@ -169,14 +169,16 @@ public class Agent {
         return urls;
     }
 
-    private static void startRepl(int port) {
+    private static void startRepl(int port, Instrumentation inst) {
         // avoids making load-time references to Clojure classes from the system classloader
         try {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             Class<?> repl = Class.forName("net.djpowell.liverepl.server.Repl", true, cl);
-            Method method = repl.getMethod("main", InetAddress.class, Integer.TYPE);
-            method.invoke(null, Main.LOCALHOST, port);
-        } catch (Exception e) {
+            Method method = repl.getMethod("main", InetAddress.class, Integer.TYPE, Instrumentation.class);
+            method.invoke(null, Main.LOCALHOST, port, inst);
+        } catch (RuntimeException e) {
+	    throw e;
+	} catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
