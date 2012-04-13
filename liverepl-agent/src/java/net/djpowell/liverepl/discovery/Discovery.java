@@ -24,7 +24,7 @@ public class Discovery implements ClassLoaderDiscovery {
     }
 
     public Collection<ClassLoaderInfo> listClassLoaders() {
-        List<ClassLoaderInfo> ret = new ArrayList();
+        List<ClassLoaderInfo> ret = new ArrayList<ClassLoaderInfo>();
         for (ClassLoaderDiscovery discovery : impls) {
             ret.addAll(discovery.listClassLoaders());
         }

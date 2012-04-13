@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Agent-Class: net.djpowell.liverepl.agent.Agent
-Main-Class: net.djpowell.liverepl.client.Main
