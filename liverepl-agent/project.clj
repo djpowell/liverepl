@@ -1,4 +1,4 @@
-(defproject net.djpowell/liverepl-agent "2.0.0"
+(defproject net.djpowell/liverepl-agent "1.1.0"
   :description "FIXME: write description"
   :source-path "src/clj"
   :java-source-path "src/java"
