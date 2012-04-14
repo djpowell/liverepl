@@ -1,0 +1,34 @@
+<project name="liverepl" basedir="." default="build">
+
+    <!-- build release zip -->
+
+    <target name="clean" description="delete build and classes">
+        <delete dir="./build" />
+        <delete dir="./lib" />
+        <exec vmlauncher="false" executable="lein">
+            <arg value="clean" />
+        </exec>
+    </target>
+
+    <target name="build" description="build" depends="clean">
+        <mkdir dir="./build" />
+        <mkdir dir="./build/lib" />
+        <exec vmlauncher="false" executable="lein">
+            <arg value="deps" />
+        </exec>
+        <copy todir="./build">
+            <fileset file="./liverepl.bat" />
+            <fileset file="./liverepl.sh" />
+            <fileset file="../README.md" />
+            <fileset file="../LICENSE" />
+        </copy>
+        <copy todir="./build/lib">
+            <fileset dir="lib" />
+        </copy>
+        <zip destfile="liverepl.zip">
+            <fileset dir="./build" />
+        </zip>
+    </target>
+
+</project>
+
