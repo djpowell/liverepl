@@ -1,4 +1,4 @@
-(defproject net.djpowell.liverepl-server "1.0.0-SNAPSHOT"
+(defproject net.djpowell/liverepl-server "2.0.0"
   :description "FIXME: write description"
   :dependencies [[org.clojure/clojure "1.3.0"]]
   :source-path "src/clj"
