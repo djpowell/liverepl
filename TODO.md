@@ -23,6 +23,8 @@
 
 * Make a nice github page -> world domination
 
+* Exclude liverepl itself from the process list
+
 ## Important
 
 * Update the README to reflect the latest build, configuration and usage
