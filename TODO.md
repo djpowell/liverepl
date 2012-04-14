@@ -15,9 +15,18 @@
 
 * Find a way of connecting to a target that is running as a system service on Windows.
 
+* Improve the command-line UI
+
+* Support some way of selecting a process and class-loader via an expression
+
+* Support loading a clojure script (then exiting?)
+
+* Make a nice github page -> world domination
+
 ## Important
 
 * Update the README to reflect the latest build, configuration and usage
 
 * Make a binary release including clojure - figure out license implications
+
 
