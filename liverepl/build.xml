@@ -12,7 +12,6 @@
 
     <target name="build" description="build" depends="clean">
         <mkdir dir="./build" />
-        <mkdir dir="./build/lib" />
         <exec vmlauncher="false" executable="lein">
             <arg value="deps" />
         </exec>
@@ -22,8 +21,17 @@
             <fileset file="../README.md" />
             <fileset file="../LICENSE" />
         </copy>
-        <copy todir="./build/lib">
-            <fileset dir="lib" />
+        <copy tofile="./build/clojure.jar">
+            <fileset file="./lib/clojure-*jar" />
+        </copy>
+        <copy tofile="./build/liverepl-agent.jar">
+            <fileset file="./lib/liverepl-agent-*.jar" />
+        </copy>
+        <copy tofile="./build/liverepl-client.jar">
+            <fileset file="./lib/liverepl-client-*.jar" />
+        </copy>
+        <copy tofile="./build/liverepl-server.jar">
+            <fileset file="./lib/liverepl-server-*.jar" />
         </copy>
         <zip destfile="liverepl.zip">
             <fileset dir="./build" />

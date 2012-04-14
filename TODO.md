@@ -14,3 +14,10 @@
 * Support other repls
 
 * Find a way of connecting to a target that is running as a system service on Windows.
+
+## Important
+
+* Update the README to reflect the latest build, configuration and usage
+
+* Make a binary release including clojure - figure out license implications
+
