@@ -5,7 +5,7 @@
 LIVEREPL_HOME="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
 MAIN=net.djpowell.liverepl.client.Main
-CLOJURE_JAR=$(find $LIVEREPL_HOME -name 'clojure-*[0-9].jar')
+CLOJURE_JAR=$(find $LIVEREPL_HOME/build -name 'clojure-*[0-9].jar' | head -1)
 AGENT_JAR="$LIVEREPL_HOME/build/liverepl-agent.jar"
 SERVER_JAR="$LIVEREPL_HOME/build/liverepl-server.jar"
 
