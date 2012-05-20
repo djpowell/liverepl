@@ -6,6 +6,10 @@ The process does not need to have been set up in any special way beforehand.
 You can use the repl to develop interactively, run code, inspect variables, and
 redefine Clojure functions.
 
+## News
+
+New 1.1 branch - mostly just a core reorganization at the moment
+
 ## Getting started
 
 Download and unzip the binary release from:
