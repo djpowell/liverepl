@@ -85,15 +85,6 @@ To build:
 Ensure that the version of `java` on your path is from a JDK.
 
 ```sh
-cd liverepl-agent
-lein install
-cd ..
-cd liverepl-client
-lein install
-cd ..
-cd liverepl-server
-lein install
-cd ..
 cd liverepl
 ant
 ```

@@ -12,6 +12,15 @@
 
     <target name="build" description="build" depends="clean">
         <mkdir dir="./build" />
+        <exec vmlauncher="false" executable="lein" dir="../liverepl-agent">
+            <arg value="install" />
+        </exec>
+        <exec vmlauncher="false" executable="lein" dir="../liverepl-client">
+            <arg value="install" />
+        </exec>
+        <exec vmlauncher="false" executable="lein" dir="../liverepl-server">
+            <arg value="install" />
+        </exec>
         <exec vmlauncher="false" executable="lein">
             <arg value="deps" />
         </exec>
