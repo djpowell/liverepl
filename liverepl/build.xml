@@ -19,7 +19,6 @@
             <fileset file="./liverepl.bat" />
             <fileset file="./liverepl.sh" />
             <fileset file="../README.md" />
-            <fileset file="../LICENSE" />
             <fileset file="../NOTICE" />
             <fileset file="../epl-v10.html" />
         </copy>
