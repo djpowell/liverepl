@@ -25,6 +25,8 @@
 
 * Exclude liverepl itself from the process list
 
+* Experiment with nrepl injection
+
 ## Important
 
 * Update the README to reflect the latest build, configuration and usage
