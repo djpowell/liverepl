@@ -45,6 +45,12 @@ If you aren't sure which ClassLoader to use, try '0', which will always be the S
 For advanced configurations, such as connecting to a web application on Tomcat, you may want to
 connect to an alternate classloader.
 
+liverepl currently finds classloaders for:
+
+  * The system classloader
+  * Thread context classloaders for all threads
+  * Webapp classloaders for Tomcat webapps
+
 You will now be presented with a clojure repl, which you can use to type clojure code.  For clojure
 programs you will be connected using the verson of clojure used by that program, otherwise the
 version of clojure from liverepl will be used.
