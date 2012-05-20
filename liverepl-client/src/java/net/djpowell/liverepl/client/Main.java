@@ -4,6 +4,7 @@ import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
@@ -34,8 +35,16 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+
+    private static String getLocalPid() {
+        String vmid = ManagementFactory.getRuntimeMXBean().getName();
+        int p = vmid.indexOf('@');
+        if (p == -1) return null;
+        return vmid.substring(0, p);
+    }
     
     private static void listPids() {
+        String localPid = getLocalPid();
         System.out.println();
         System.out.println("liverepl");
         System.out.println("Usage: liverepl <pid>");
@@ -43,6 +52,7 @@ public class Main {
         System.out.println("List of Java processes");
         System.out.format("%1$-6s %2$.60s%n", "pid", "Details");
         for (VirtualMachineDescriptor vmd : VirtualMachine.list()) {
+            if (localPid != null && localPid.equals(vmd.id())) continue; // skip our own pid
             System.out.format("%1$-6s %2$.60s%n", vmd.id(), vmd.displayName());
         }
     }

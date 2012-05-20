@@ -23,14 +23,5 @@
 
 * Make a nice github page -> world domination
 
-* Exclude liverepl itself from the process list
-
 * Experiment with nrepl injection
-
-## Important
-
-* Update the README to reflect the latest build, configuration and usage
-
-* Make a binary release including clojure - figure out license implications
-
 
