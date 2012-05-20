@@ -45,11 +45,16 @@ public class Main {
     
     private static void listPids() {
         String localPid = getLocalPid();
+        System.out.println("liverepl - Connect a clojure repl to any running Java or Clojure process");
         System.out.println();
-        System.out.println("liverepl");
-        System.out.println("Usage: liverepl <pid>");
+        System.out.println("Usage:");
+        System.out.println("  liverepl                        - list the pids of all available processes");
+        System.out.println("  liverepl <pid>                  - list the class-loaders of the selected process");
+        System.out.println("  liverepl <pid> 0                - connect a repl to the default class-loader");
+        System.out.println("  liverepl <pid> <classloader-id> - connect a repl to a specific class-loader");
         System.out.println();
-        System.out.println("List of Java processes");
+        System.out.println("List of Java processes:");
+        System.out.println();
         System.out.format("%1$-6s %2$.60s%n", "pid", "Details");
         for (VirtualMachineDescriptor vmd : VirtualMachine.list()) {
             if (localPid != null && localPid.equals(vmd.id())) continue; // skip our own pid
@@ -70,8 +75,7 @@ public class Main {
         String classLoaderId;
         if (args.length < 5) {
             classLoaderId = "L";
-            System.out.println();
-            System.out.println("List of ClassLoaders for process #" + pid);
+            System.out.println("List of ClassLoaders for process #" + pid + ":");
         } else {
             classLoaderId = args[4];
         }
