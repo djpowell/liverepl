@@ -20,6 +20,8 @@
             <fileset file="./liverepl.sh" />
             <fileset file="../README.md" />
             <fileset file="../LICENSE" />
+            <fileset file="../NOTICE" />
+            <fileset file="../epl-v10.html" />
         </copy>
         <copy tofile="./build/clojure.jar">
             <fileset file="./lib/clojure-*jar" />
