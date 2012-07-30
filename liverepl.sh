@@ -5,7 +5,7 @@
 LIVEREPL_HOME="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
 MAIN=net.djpowell.liverepl.client.Main
-CLOJURE_JAR=$(find $LIVEREPL_HOME/build -name 'clojure-*[0-9].jar' | head -1)
+CLOJURE_JAR=$(find $LIVEREPL_HOME/build -name 'clojure-*[0-9].jar' -o -name 'clojure.jar' | head -1)
 AGENT_JAR="$LIVEREPL_HOME/build/liverepl-agent.jar"
 SERVER_JAR="$LIVEREPL_HOME/build/liverepl-server.jar"
 
@@ -31,6 +31,3 @@ fi
 CLASSPATH="$CLASSPATH:$AGENT_JAR"
 
 ${WRAP}java -cp $CLASSPATH $MAIN "$CLOJURE_JAR" "$AGENT_JAR" "$SERVER_JAR" "$@"
-
-
-
