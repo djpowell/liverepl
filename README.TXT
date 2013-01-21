@@ -1,6 +1,13 @@
 LiveRepl
 ========
 
+***
+New download locations for binaries:
+  http://djpowell.net/files/liverepl-1.0.zip
+  http://djpowell.net/files/liverepl-1.1-alpha.zip
+***
+
+
 Start a Clojure REPL connected to any running Java or Clojure process
 without needing the process to be setup in any special way beforehand.
 
