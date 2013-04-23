@@ -1,7 +1,6 @@
-(defproject net.djpowell/liverepl-server "1.1.0"
+(defproject net.djpowell/liverepl-server "1.2.0-SNAPSHOT"
   :description "FIXME: write description"
-  :dependencies [[org.clojure/clojure "1.4.0"]]
-  :source-path "src/clj"
-  :java-source-path "src/java"
+  :source-paths ["src/clj"]
+  :java-source-paths ["src/java"]
   :javac-options {:debug "true"}
   )

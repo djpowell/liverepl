@@ -1,8 +1,10 @@
-(defproject net.djpowell/liverepl-client "1.1.0"
+(defproject net.djpowell/liverepl-client "1.2.0-SNAPSHOT"
   :description "FIXME: write description"
-  :source-path "src/clj"
-  :java-source-path "src/java"
+  :dependencies [[org.clojure/clojure "1.5.1"]]
+  :profiles {:dev
+             {:resource-paths [~(str (System/getProperty "java.home") "/../lib/tools.jar")]}}
+  :source-paths ["src/clj"]
+  :java-source-paths ["src/java"]
   :javac-options {:debug "true"}
-  :extra-classpath-dirs ~[(str (System/getProperty "java.home") "/../lib/tools.jar")]
   :main ^:skip-aot net.djpowell.liverepl.client.Main
   )

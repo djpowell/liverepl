@@ -46,7 +46,7 @@ public class Agent {
                 } catch (InterruptedException e) {
                     // ignore
                 }
-                if (!connected.get()) {
+                if (connected.get()) {
                     // TRC.fine("Client connect timeout: terminating server");
                     try {
                         server.close();
