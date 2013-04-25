@@ -25,3 +25,8 @@
 
 * Experiment with nrepl injection
 
+* Implement as a lein plugin
+
+* Reimplement standalone version
+
+* Remove old banner from lein version on run
