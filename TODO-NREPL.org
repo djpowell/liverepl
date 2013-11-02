@@ -1,0 +1,33 @@
+
+ * Replace most of lein-server with an nrepl server injection
+
+ * Need to be able to authenticate the newly created repl with a
+   session id
+
+ * Maybe implement discovery via an nrepl middleware?
+
+ * Disconnection via a middleware?
+
+* Launch modes
+
+** repl mode
+
+   liverepl starts up an nrepl, with session auth, bound to localhost,
+   and a dynamic port, connects to it, and unloads nrepl when the
+   client disconnects
+
+** server mode
+
+   liverepl starts up an nrepl, displays the port, and leaves it
+   running.  the port and bind address can be configured
+
+* Packaging
+
+** lein
+
+   available as a lein plugin
+
+** standalone
+
+   available as a bunch of jars with REPLy bundled as the repl
+

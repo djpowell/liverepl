@@ -146,6 +146,7 @@ public class Agent {
         String serverPath = stok.nextToken();
         String classLoaderId = stok.nextToken();
 
+	// TODO this needs replacing with a custom nrepl command to list the classloaders
         if ("L".equals(classLoaderId)) {
             printClassLoaderInfo(port);
             return;
@@ -154,12 +155,11 @@ public class Agent {
         boolean clojureLoaded = isClojureLoaded();
         TRC.fine("Clojure is " + (clojureLoaded ? "" : "not ") + "loaded");
 
-        List<URL> urls;
-        if (clojureLoaded) {
-            urls = getJarUrls(serverPath);
-        } else {
-            urls = getJarUrls(clojurePath, serverPath);
-        }
+	// TODO exclude nrepl if it is loaded?
+
+	List<URL> urls = getJarUrls((!clojureLoaded ?
+				     clojurePath + System.getProperty("path.separator")
+				     : "") + serverPath);
 
         ClassLoader old = pushClassLoader(urls, classLoaderId);
         try {
@@ -172,10 +172,10 @@ public class Agent {
         }
     }
 
-    private static List<URL> getJarUrls(String... paths) {
+    private static List<URL> getJarUrls(String paths) {
         List<URL> urls = new ArrayList<URL>();
         try {
-            for (String path : paths) {
+            for (String path : paths.split(System.getProperty("path.separator"))) {
                 URL url = new File(path).toURI().toURL();
                 urls.add(url);
             }

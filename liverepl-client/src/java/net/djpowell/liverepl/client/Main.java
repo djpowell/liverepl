@@ -68,6 +68,9 @@ public class Main {
             listPids();
             System.exit(0);
         }
+
+	System.out.println("CARGS: " + java.util.Arrays.asList(args));
+
         String clojurepath = args[0];
         String agentpath = args[1];
         String serverpath = args[2];
@@ -79,6 +82,8 @@ public class Main {
         } else {
             classLoaderId = args[4];
         }
+
+	System.out.println("CLID: " + classLoaderId);
 
         TRC.fine("Attaching to pid: " + pid);
         final VirtualMachine vm = VirtualMachine.attach(pid);
