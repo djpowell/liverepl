@@ -3,4 +3,11 @@
 **/.settings
 **/*.jardesc
 **/.settings/**
-liverepl-server/lib/clojure.jar
+.idea/**
+out/**
+**/classes/**
+target/**
+**/target/**
+pom.xml
+*~
+*.jar
