@@ -10,6 +10,11 @@ import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.logging.Logger;
 
+import clojure.lang.RT;
+import clojure.lang.Var;
+import clojure.lang.Symbol;
+import clojure.lang.IFn;
+
 public class Main {
 
     // bind to localhost to keep things more secure
@@ -21,6 +26,15 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+
+    private static final IFn REQUIRE = RT.var("clojure.core", "require");
+    private static final Symbol CLIENT_CORE = Symbol.intern("net.djpowell.liverepl.client.core");
+    private static final IFn RUN_COMMAND = RT.var("net.djpowell.liverepl.client.core", "run-command");
+    private static final IFn CONNECT_REPL = RT.var("net.djpowell.liverepl.client.core", "connect-repl");
+    static {
+	REQUIRE.invoke(CLIENT_CORE);
+    }
+    
     
     private static int getFreePort(InetAddress host) {
         // open a server socket on a random port, then close it
@@ -94,8 +108,13 @@ public class Main {
         vm.loadAgent(agentpath, agentArgs);
 
         boolean listClassLoaders = "L".equals(classLoaderId);
-        // start the code that will connect to the server socket
-        Console.main(LOCALHOST, port, !listClassLoaders);
+	
+	if (listClassLoaders) {
+	    Object ret = RUN_COMMAND.invoke(LOCALHOST.getHostAddress(), port, "liverepl-list-classloaders");
+	    System.out.println(ret);
+	} else {
+	    CONNECT_REPL.invoke(LOCALHOST.getHostAddress(), port);
+	}
 
         // the server will shutdown when the client disconnects
         Runtime.getRuntime().addShutdownHook(new Thread() {

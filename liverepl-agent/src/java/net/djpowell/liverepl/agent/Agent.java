@@ -18,7 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
+
+// TODO so, the agent can handle class-loader discovery, but enumeration
+// will happen in the server.  the agent will pass the server a reference
+// to a Callable that will do the discovery
+
+// TODO have an unload option for the agent
 
 public class Agent {
 
@@ -33,75 +40,44 @@ public class Agent {
     }
 
     private static final Discovery discovery = new Discovery();
+    
+    private static final Callable<String> DO_DISCOVER =
+	new Callable<String>() {
+	public String call() {
+	    return discovery.dumpList();
+	}
+    };
 
-    public static interface ConnectNotifyingTask {
-        void run(ServerSocket server, AtomicBoolean connected);
-    }
-
-    private static Thread startKillerThread(final int connectTimeout, final AtomicBoolean connected, final ServerSocket server) {
-        Thread killer = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    Thread.sleep(connectTimeout);
-                } catch (InterruptedException e) {
-                    // ignore
-                }
-                if (connected.get()) {
-                    // TRC.fine("Client connect timeout: terminating server");
-                    try {
-                        server.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }, "Killer Thread");
-        killer.start();
-        return killer;
-    }
-
-    public static void runAfterConnect(int port, int connectTimeout, String threadName, final ConnectNotifyingTask task) throws Exception {
-        final ServerSocket serverSocket = new ServerSocket(port, 0, LOCALHOST);
-        final AtomicBoolean connected = new AtomicBoolean(false);
-        Thread taskThread = new Thread(new Runnable() {
-            public void run() {
-                task.run(serverSocket, connected);
-            }
-        }, threadName);
-        startKillerThread(connectTimeout, connected, serverSocket);
-        taskThread.start();
-    }
-
-    private static void printClassLoaderInfo(int port) {
-        try {
-            runAfterConnect(port, 5000, "ClassLoaderInfoThread", new ConnectNotifyingTask() {
-                public void run(ServerSocket server, AtomicBoolean connected) {
-                    try {
-                        Socket socket = server.accept();
-                        connected.set(true);
-                        try {
-                            PrintStream out = new PrintStream(socket.getOutputStream());
-                            try {
-                                discovery.dumpList(out);
-                            } finally {
-                                out.close();
-                            }
-                        } finally {
-                            socket.close();
-                        }
-                    } catch (RuntimeException e) {
-                        throw e;
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    // private static void printClassLoaderInfo(int port) {
+    //     try {
+    //         runAfterConnect(port, 5000, "ClassLoaderInfoThread", new ConnectNotifyingTask() {
+    //             public void run(ServerSocket server, AtomicBoolean connected) {
+    //                 try {
+    //                     Socket socket = server.accept();
+    //                     connected.set(true);
+    //                     try {
+    //                         PrintStream out = new PrintStream(socket.getOutputStream());
+    //                         try {
+    //                             discovery.dumpList(out);
+    //                         } finally {
+    //                             out.close();
+    //                         }
+    //                     } finally {
+    //                         socket.close();
+    //                     }
+    //                 } catch (RuntimeException e) {
+    //                     throw e;
+    //                 } catch (Exception e) {
+    //                     throw new RuntimeException(e);
+    //                 }
+    //             }
+    //         });
+    //     } catch (RuntimeException e) {
+    //         throw e;
+    //     } catch (Exception e) {
+    //         throw new RuntimeException(e);
+    //     }
+    // }
 
     private static ClassLoader pushClassLoader(List<URL> urls, String clId)  {
         TRC.fine("Creating new classloader with: " + urls);
@@ -112,7 +88,7 @@ public class Agent {
             throw new RuntimeException("Unknown class loader: " + clId);
         }
         ClassLoader cl = cli.getClassLoader();
-        URLClassLoader withClojure = new URLClassLoader(urls.toArray(new URL[urls.size()]), cl); // TODO
+        URLClassLoader withClojure = new URLClassLoader(urls.toArray(new URL[urls.size()]), cl);
         Thread.currentThread().setContextClassLoader(withClojure);
         return old;
     }
@@ -146,11 +122,14 @@ public class Agent {
         String serverPath = stok.nextToken();
         String classLoaderId = stok.nextToken();
 
+	boolean listClassLoaders;
 	// TODO this needs replacing with a custom nrepl command to list the classloaders
         if ("L".equals(classLoaderId)) {
-            printClassLoaderInfo(port);
-            return;
+	    listClassLoaders = true;
+	    classLoaderId = "0";
         }
+
+	// TODO send command to list class loaders
 
         boolean clojureLoaded = isClojureLoaded();
         TRC.fine("Clojure is " + (clojureLoaded ? "" : "not ") + "loaded");
@@ -190,8 +169,8 @@ public class Agent {
         try {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             Class<?> repl = Class.forName("net.djpowell.liverepl.server.Repl", true, cl);
-            Method method = repl.getMethod("main", InetAddress.class, Integer.TYPE);
-            method.invoke(null, LOCALHOST, port);
+            Method method = repl.getMethod("main", InetAddress.class, Integer.TYPE, Callable.class);
+            method.invoke(null, LOCALHOST, port, DO_DISCOVER);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
