@@ -1,6 +1,7 @@
 package net.djpowell.liverepl.agent;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.instrument.Instrumentation;
@@ -120,7 +121,7 @@ public class Agent {
         TRC.fine("Started Attach agent");
 
         StringTokenizer stok = new StringTokenizer(agentArgs, "\n");
-        if (stok.countTokens() != 4) {
+        if (stok.countTokens() != 5) {
             throw new RuntimeException("Invalid parameters: " + agentArgs);
         }
         
@@ -128,6 +129,7 @@ public class Agent {
         TRC.fine("Port: " + port);
         String clojurePath = stok.nextToken();
         String serverPath = stok.nextToken();
+        String jarsPath = stok.nextToken();
         String classLoaderId = stok.nextToken();
 
         if ("L".equals(classLoaderId)) {
@@ -144,6 +146,19 @@ public class Agent {
         } else {
             urls = getJarUrls(clojurePath, serverPath);
         }
+        File jarsDir = new File(jarsPath);
+        if (jarsDir.exists()) {
+            // TODO: Check permissions on dir (should be writable only by owner of JVM)
+            String[] candidates = jarsDir.list(new FilenameFilter() {
+                public boolean accept(File dir, String path) {
+                    return path.endsWith(".jar");
+                }
+            });
+            for (String jarFile : candidates) {
+                // TODO: Check permissions on jar (should be writable only by owner of JVM)
+                urls.add(getJarUrl(new File(jarsDir, jarFile).getPath()));
+            }
+        }
 
         ClassLoader old = pushClassLoader(urls, classLoaderId);
         try {
@@ -156,15 +171,20 @@ public class Agent {
         }
     }
 
+
+    private static URL getJarUrl(String path) {
+        try {
+            return new File(path).toURI().toURL();
+        } catch (Exception e) {
+            throw new RuntimeException("Could not get jar URL for path: " + path, e);
+        }
+    }
+
     private static List<URL> getJarUrls(String... paths) {
         List<URL> urls = new ArrayList<URL>();
-        try {
-            for (String path : paths) {
-                URL url = new File(path).toURI().toURL();
-                urls.add(url);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        for (String path : paths) {
+            URL url = getJarUrl(path);
+            urls.add(url);
         }
         return urls;
     }

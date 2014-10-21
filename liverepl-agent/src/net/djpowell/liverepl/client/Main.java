@@ -48,30 +48,31 @@ public class Main {
     }
     
     public static void main(String[] args) throws Exception {
-        // Usage: <clojurepath> <agentjarpath> <serverjarpath> <jvmpid> <classloaderid>
-        if (args.length < 4) {
+        // Usage: <clojurepath> <agentjarpath> <serverjarpath> <jarsdir> <jvmpid> <classloaderid>
+        if (args.length < 5) {
             listPids();
             System.exit(0);
         }
         String clojurepath = args[0];
         String agentpath = args[1];
         String serverpath = args[2];
-        String pid = args[3];
+        String jarsdir = args[3];
+        String pid = args[4];
         String classLoaderId;
-        if (args.length < 5) {
+        if (args.length < 6) {
             classLoaderId = "L";
             System.out.println();
             System.out.println("List of ClassLoaders for process #" + pid);
         } else {
-            classLoaderId = args[4];
+            classLoaderId = args[5];
         }
-        
+
         TRC.fine("Attaching to pid: " + pid);
         final VirtualMachine vm = VirtualMachine.attach(pid);
         
         int port = getFreePort(LOCALHOST);
         // start the agent, which will create the server socket, then return
-        String agentArgs = String.valueOf(port) + "\n" + clojurepath + "\n" + serverpath + "\n" + classLoaderId;
+        String agentArgs = String.valueOf(port) + "\n" + clojurepath + "\n" + serverpath + "\n" + jarsdir + "\n" + classLoaderId;
         vm.loadAgent(agentpath, agentArgs);
 
         boolean listClassLoaders = "L".equals(classLoaderId);
