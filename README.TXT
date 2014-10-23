@@ -43,6 +43,9 @@ Configuration
 
 Edit liverepl.bat to point to your installed JDK
 
+Place any extra jars you would like loaded into the JVM into ./jars/
+(creating it if necessary.)
+
 ----------------------------------------
 
 Operation
