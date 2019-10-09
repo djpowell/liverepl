@@ -1,7 +1,8 @@
 (defproject liverepl "1.2.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.clojure/tools.nrepl "0.2.3"]
-                 [clojure-complete "0.2.3"]]
+  :dependencies [[org.clojure/clojure "1.7.0"]
+                 [org.clojure/tools.nrepl "0.2.12"]
+                 [clojure-complete "0.2.3"]
+                 [cider/cider-nrepl "0.18.0-SNAPSHOT"]]
   :java-source-paths ["liverepl-agent/src" "liverepl-server/src"]
   :manifest {"Agent-Class" "net.djpowell.liverepl.agent.Agent"
              "Main-Class" "net.djpowell.liverepl.client.Main"}
